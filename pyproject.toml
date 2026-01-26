@@ -1,0 +1,20 @@
+[project]
+name = "odoo-fastapi-api"
+version = "0.1.0"
+description = "FastAPI proxy vers Odoo (contacts) avec JWT + HMAC"
+requires-python = ">=3.14"
+dependencies = [
+    "fastapi",
+    "uvicorn[standard]",
+    "python-jose[cryptography]",
+    "pydantic-settings",
+    "python-multipart",
+]
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "httpx",
+    "pytest-mock",
+]
+

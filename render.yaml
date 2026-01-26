@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: odoo-fastapi-api
+    env: docker
+    plan: free
+    autoDeploy: true
+    envVars:
+      - key: ODOO_URL
+        sync: false
+      - key: ODOO_DB
+        sync: false
+      - key: ODOO_USER
+        sync: false
+      - key: ODOO_PASSWORD
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: HMAC_SECRET
+        generateValue: true
+
