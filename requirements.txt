@@ -40,3 +40,4 @@ uvloop==0.22.1 ; platform_python_implementation != 'PyPy' and sys_platform != 'c
 watchfiles==1.1.1
 websockets==16.0
 mangum==0.18.0
+psycopg2-binary==2.9.9
