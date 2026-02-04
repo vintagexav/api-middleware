@@ -51,13 +51,20 @@ Le serveur sera accessible sur :
 # Avec options pytest personnalisées
 ./scripts/run_tests.sh tests/test_contacts.py                    # Tester un fichier spécifique
 ./scripts/run_tests.sh tests/test_odoo_client.py                  # Tester le client Odoo
+./scripts/run_tests.sh tests/integration/                         # Tester uniquement les tests d'intégration
 ./scripts/run_tests.sh tests/test_contacts.py::test_login        # Tester une fonction spécifique
 ./scripts/run_tests.sh --cov=app                                  # Avec couverture de code
+
+# Script dédié pour les tests d'intégration
+./scripts/run_integration_tests.sh                                # Exécuter uniquement les tests d'intégration
 ```
 
 **Tests disponibles :**
 - `tests/test_contacts.py` : Tests unitaires pour l'API FastAPI (6 tests)
 - `tests/test_odoo_client.py` : Tests unitaires pour le client Odoo XML-RPC (5 tests)
+- `tests/integration/test_integration.py` : Tests d'intégration complets (4 tests)
+  - Teste le flux complet : Odoo → Base de données → API
+  - Nécessite une connexion active à Odoo
 
 Voir [tests/README.md](tests/README.md) pour plus de détails sur les tests.
 
@@ -223,10 +230,11 @@ api-middleware/
 │   ├── __init__.py
 │   └── index.py         # Handler Vercel
 ├── scripts/
-│   ├── install_cron.sh  # Script d'installation du cron
-│   ├── run_server.sh    # Script pour lancer le serveur localement
-│   ├── run_tests.sh     # Script pour exécuter les tests
-│   └── sync_with_env.sh # Sync avec chargement du .env
+│   ├── install_cron.sh          # Script d'installation du cron
+│   ├── run_server.sh            # Script pour lancer le serveur localement
+│   ├── run_tests.sh             # Script pour exécuter tous les tests
+│   ├── run_integration_tests.sh # Script pour exécuter uniquement les tests d'intégration
+│   └── sync_with_env.sh         # Sync avec chargement du .env
 ├── tests/
 │   ├── __init__.py
 │   ├── README.md        # Documentation des tests
@@ -271,6 +279,8 @@ Les tests sont organisés dans le dossier `tests/` :
 tests/
 ├── test_contacts.py          # Tests unitaires API FastAPI
 ├── test_odoo_client.py       # Tests unitaires client Odoo
+├── integration/              # Tests d'intégration
+│   └── test_integration.py  # Tests d'intégration complets
 └── scripts/                  # Scripts de test manuels
 ```
 
@@ -290,6 +300,14 @@ tests/
 - Récupération d'un contact par ID
 - Gestion d'un ID inexistant
 - Validation des variables d'environnement
+
+**Tests d'intégration (`test_integration.py`)** :
+- `test_integration_odoo_to_db` : Récupération depuis Odoo et stockage en base de données
+- `test_integration_db_to_api` : Lecture depuis la base de données via l'API
+- `test_integration_full_flow` : Flux complet Odoo → DB → API
+- `test_integration_fetch_endpoint` : Endpoint `/fetch` qui récupère directement depuis Odoo
+
+**Note** : Les tests d'intégration nécessitent une connexion active à Odoo et testent le flux complet du système de bout en bout.
 
 Les tests utilisent une base SQLite temporaire et surchargent la dépendance `get_db` de FastAPI pour isoler les tests de la base de production.
 

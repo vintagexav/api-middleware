@@ -16,7 +16,9 @@ tests/
 │   ├── test_import.py       # Test d'imports
 │   ├── test_api.sh          # Script shell pour tester l'API locale
 │   └── test_vercel.sh       # Script shell pour tester l'API Vercel
-└── integration/             # Tests d'intégration (vide pour l'instant)
+└── integration/             # Tests d'intégration
+    ├── __init__.py
+    └── test_integration.py  # Tests d'intégration complets
 ```
 
 ## Exécution des tests
@@ -40,6 +42,12 @@ Pour exécuter un test spécifique :
 
 ```bash
 ./scripts/run_tests.sh tests/test_contacts.py::test_login_and_get_contacts
+```
+
+Pour exécuter les tests d'intégration :
+
+```bash
+./scripts/run_tests.sh tests/integration/
 ```
 
 ### Scripts de test manuels
@@ -76,6 +84,17 @@ Tests pour le client Odoo utilisant XML-RPC.
 - Récupération d'un contact par ID
 - Gestion d'un ID inexistant
 - Validation des variables d'environnement
+
+### `test_integration.py`
+Tests d'intégration pour vérifier le flux complet du système.
+
+**Tests inclus :**
+- `test_integration_odoo_to_db` : Récupération depuis Odoo et stockage en base de données
+- `test_integration_db_to_api` : Lecture depuis la base de données via l'API
+- `test_integration_full_flow` : Flux complet Odoo -> DB -> API
+- `test_integration_fetch_endpoint` : Endpoint `/fetch` qui récupère directement depuis Odoo
+
+**Note :** Ces tests nécessitent une connexion active à Odoo et testent l'intégration complète du système.
 
 ## Configuration
 
