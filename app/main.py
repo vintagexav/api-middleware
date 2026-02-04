@@ -1,8 +1,10 @@
+from contextlib import asynccontextmanager
+
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 
 from .config import settings  # noqa: F401  # chargé pour valider la config au démarrage
-from .database import get_db
+from .database import Base, engine, get_db
 from .db_client import DBClient
 from .security import (
     authenticate_user,
@@ -11,7 +13,17 @@ from .security import (
     verify_hmac,
 )
 
-app = FastAPI(title="Odoo Contacts API", version="0.1.0")
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Gère le cycle de vie de l'application."""
+    # Startup: Créer les tables au démarrage
+    Base.metadata.create_all(bind=engine)
+    yield
+    # Shutdown: Nettoyage si nécessaire
+
+
+app = FastAPI(title="Odoo Contacts API", version="0.1.0", lifespan=lifespan)
 
 
 @app.post("/auth/login")
