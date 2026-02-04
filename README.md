@@ -52,7 +52,7 @@ Le serveur sera accessible sur :
 ./scripts/run_tests.sh tests/test_contacts.py                    # Tester un fichier spécifique
 ./scripts/run_tests.sh tests/test_odoo_client.py                  # Tester le client Odoo
 ./scripts/run_tests.sh tests/integration/                         # Tester uniquement les tests d'intégration
-./scripts/run_tests.sh tests/test_contacts.py::test_login        # Tester une fonction spécifique
+./scripts/run_tests.sh tests/test_contacts.py::test_login_and_get_contacts  # Tester une fonction spécifique
 ./scripts/run_tests.sh --cov=app                                  # Avec couverture de code
 
 # Script dédié pour les tests d'intégration
@@ -249,7 +249,9 @@ api-middleware/
 │   │   ├── test_import.py          # Test d'imports
 │   │   ├── test_api.sh             # Script shell pour tester l'API locale
 │   │   └── test_vercel.sh          # Script shell pour tester l'API Vercel
-│   └── integration/          # Tests d'intégration (vide pour l'instant)
+│   └── integration/                # Tests d'intégration
+│       ├── __init__.py
+│       └── test_integration.py     # Tests d'intégration complets (Odoo -> DB -> API)
 ├── sync_contacts.py     # Script de synchronisation Odoo -> DB
 ├── init_db.py           # Initialisation de la base de données
 ├── crontab.example      # Exemple de configuration cron
@@ -277,11 +279,19 @@ Les tests sont organisés dans le dossier `tests/` :
 
 ```
 tests/
-├── test_contacts.py          # Tests unitaires API FastAPI
-├── test_odoo_client.py       # Tests unitaires client Odoo
-├── integration/              # Tests d'intégration
-│   └── test_integration.py  # Tests d'intégration complets
-└── scripts/                  # Scripts de test manuels
+├── __init__.py              # Package Python
+├── README.md                # Documentation des tests
+├── test_contacts.py         # Tests unitaires API FastAPI
+├── test_odoo_client.py      # Tests unitaires client Odoo
+├── integration/             # Tests d'intégration
+│   ├── __init__.py
+│   └── test_integration.py  # Tests d'intégration complets (Odoo -> DB -> API)
+└── scripts/                 # Scripts de test manuels
+    ├── README.md            # Documentation des scripts de test
+    ├── test_api_improved.py # Test API locale
+    ├── test_vercel.py       # Test API Vercel
+    ├── test_odoo_complete.py # Test Odoo complet
+    └── ...                  # Autres scripts de test
 ```
 
 **Exécution des tests** : Utilisez `./scripts/run_tests.sh` (voir section "Démarrage rapide" ci-dessus).

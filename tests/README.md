@@ -6,9 +6,12 @@ Ce dossier contient tous les tests du projet.
 
 ```
 tests/
-├── test_contacts.py          # Tests unitaires pour l'API contacts
-├── test_odoo_client.py       # Tests unitaires pour le client Odoo (XML-RPC)
-├── scripts/                  # Scripts de test manuels
+├── __init__.py              # Package Python
+├── README.md                # Documentation des tests (ce fichier)
+├── test_contacts.py         # Tests unitaires pour l'API contacts
+├── test_odoo_client.py      # Tests unitaires pour le client Odoo (XML-RPC)
+├── scripts/                 # Scripts de test manuels
+│   ├── README.md            # Documentation des scripts de test
 │   ├── test_api_improved.py # Test API locale (avec gestion d'erreurs)
 │   ├── test_vercel.py       # Test API Vercel (complet)
 │   ├── test_vercel_debug.py # Test API Vercel (debug HMAC)
@@ -16,19 +19,25 @@ tests/
 │   ├── test_import.py       # Test d'imports
 │   ├── test_api.sh          # Script shell pour tester l'API locale
 │   └── test_vercel.sh       # Script shell pour tester l'API Vercel
-└── integration/             # Tests d'intégration
+└── integration/              # Tests d'intégration
     ├── __init__.py
-    └── test_integration.py  # Tests d'intégration complets
+    └── test_integration.py  # Tests d'intégration complets (Odoo -> DB -> API)
 ```
 
 ## Exécution des tests
 
 ### Tests unitaires (automatisés)
 
-Pour exécuter tous les tests unitaires :
+Pour exécuter tous les tests (unitaires + intégration) :
 
 ```bash
 ./scripts/run_tests.sh
+```
+
+**Note** : Par défaut, `run_tests.sh` exécute tous les tests, y compris les tests d'intégration. Pour exécuter uniquement les tests unitaires, utilisez :
+
+```bash
+./scripts/run_tests.sh tests/test_contacts.py tests/test_odoo_client.py
 ```
 
 Pour exécuter un fichier de test spécifique :
@@ -47,6 +56,10 @@ Pour exécuter un test spécifique :
 Pour exécuter les tests d'intégration :
 
 ```bash
+# Utiliser le script dédié (recommandé)
+./scripts/run_integration_tests.sh
+
+# Ou via run_tests.sh
 ./scripts/run_tests.sh tests/integration/
 ```
 
