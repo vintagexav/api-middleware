@@ -29,7 +29,7 @@ async def lifespan(app: FastAPI):
     # Shutdown: Nettoyage si nécessaire
 
 
-app = FastAPI(title="Odoo Contacts API", version="0.1.0", lifespan=lifespan)
+app = FastAPI(title="Odoo Contacts API", version="1.0.0", lifespan=lifespan)
 
 
 @app.get("/")
@@ -38,7 +38,7 @@ async def root():
     return {
         "status": "ok",
         "message": "Odoo Contacts API is running",
-        "version": "0.1.0"
+        "version": "1.0.0"
     }
 
 
