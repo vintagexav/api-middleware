@@ -88,9 +88,9 @@ Si vous avez connecté votre dépôt GitHub à Vercel, chaque push sur `main` d�
 ## Limitations Vercel
 
 1. **Fonctions serverless** : Chaque requête est une nouvelle instance
-2. **Timeout** : Maximum 30 secondes pour les fonctions (configuré dans vercel.json)
+2. **Timeout** : Maximum 30 secondes pour les fonctions (par défaut, configurable dans les paramètres du projet)
 3. **Base de données** : SQLite ne fonctionne pas bien, utilisez une DB externe
-4. **Cron jobs** : Vercel ne supporte pas les cron jobs. Utilisez :
+4. **Cron jobs** : Vercel ne supporte pas les cron jobs natifs. Utilisez :
    - Vercel Cron Jobs (fonctionnalité payante)
    - Un service externe comme cron-job.org
    - GitHub Actions avec un workflow cron
@@ -111,9 +111,9 @@ Créez un workflow GitHub Actions qui synchronise périodiquement.
 ## Vérification du déploiement
 
 Une fois déployé, votre API sera accessible à :
-- `https://votre-projet.vercel.app`
-- `https://votre-projet.vercel.app/docs` - Documentation interactive
-- `https://votre-projet.vercel.app/redoc` - Documentation alternative
+- `https://api-middleware-two.vercel.app`
+- `https://api-middleware-two.vercel.app/docs` - Documentation interactive
+- `https://api-middleware-two.vercel.app/redoc` - Documentation alternative
 
 ## Dépannage
 

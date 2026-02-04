@@ -1,18 +1,5 @@
 # Odoo Contacts API
 
-## Endpoints
-
-Base URL (Vercel) : `https://api-middleware-two.vercel.app`
-
-| Méthode | Endpoint | Auth | Description |
-|---------|----------|------|-------------|
-| `GET` | `/` | Non | Health check |
-| `GET` | `/health` | Non | Health check détaillé (statut DB) |
-| `GET` | `/fetch` | Non | Contacts récupérés en direct depuis Odoo |
-| `POST` | `/auth/login` | Non | Obtenir un token JWT |
-| `GET` | `/contacts` | JWT + HMAC | Contacts depuis la base de données |
-| `GET` | `/contacts/{id}` | JWT + HMAC | Contact par ID depuis la base de données |
-
 FastAPI proxy vers Odoo (contacts) avec authentification JWT + HMAC.
 
 ## Description
@@ -23,6 +10,19 @@ Cette API middleware permet d'accéder aux contacts Odoo via une API REST sécur
 - **Base de données** : SQLite en dev local, PostgreSQL en production (Vercel)
 - **Endpoint direct** : `/fetch` récupère les contacts directement depuis Odoo
 - **Endpoints sécurisés** : `/contacts` lit depuis la base de données
+
+## Endpoints
+
+**Base URL (Vercel)** : `https://api-middleware-two.vercel.app`
+
+| Méthode | Endpoint | Auth | Description |
+|---------|----------|------|-------------|
+| `GET` | `/` | Non | Health check |
+| `GET` | `/health` | Non | Health check détaillé (statut DB) |
+| `GET` | `/fetch` | Non | Contacts récupérés en direct depuis Odoo |
+| `POST` | `/auth/login` | Non | Obtenir un token JWT |
+| `GET` | `/contacts` | JWT + HMAC | Contacts depuis la base de données |
+| `GET` | `/contacts/{id}` | JWT + HMAC | Contact par ID depuis la base de données |
 
 ## Démarrage rapide (Local)
 
@@ -52,12 +52,6 @@ Le serveur sera accessible sur :
 ./scripts/run_tests.sh tests/test_contacts.py                    # Tester un fichier spécifique
 ./scripts/run_tests.sh tests/test_contacts.py::test_login        # Tester une fonction spécifique
 ./scripts/run_tests.sh --cov=app                                  # Avec couverture de code
-```
-
-**Note** : Assurez-vous d'être dans le répertoire `api-middleware` pour exécuter les scripts. Si vous êtes ailleurs, utilisez le chemin complet :
-```bash
-cd /Users/xavier/code/CHIFT/api-middleware
-./scripts/run_server.sh
 ```
 
 ## Prérequis
@@ -130,37 +124,6 @@ Pour synchroniser automatiquement les contacts toutes les 5 minutes :
 3. Vérifiez avec : `crontab -l`
 
 **Note** : La synchronisation crée automatiquement la base de données et les tables si elles n'existent pas.
-
-## Lancer l'API
-
-```bash
-# Lancer le serveur avec uvicorn
-uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-```
-
-L'API sera accessible à :
-- **Documentation interactive** : http://localhost:8000/docs
-- **Documentation alternative** : http://localhost:8000/redoc
-- **Base URL** : http://localhost:8000
-
-## Exécuter les tests
-
-```bash
-HMAC_SECRET="HMACsecretTest222@@" \
-JWT_SECRET="JWTSEcret11@@" \
-PYTHONPATH=./ \
-uv run pytest tests/ -v -s
-```
-
-**Note** : L'option `-s` est requise pour afficher les `print()` dans les tests.
-
-Les tests vérifient :
-- Authentification et récupération des contacts
-- Récupération d'un contact par ID
-- Gestion des contacts non trouvés
-- Rejet des identifiants invalides
-- Rejet des requêtes sans JWT
-- Rejet des requêtes sans signature HMAC
 
 ## Endpoints API
 
@@ -254,6 +217,8 @@ api-middleware/
 │   └── index.py         # Handler Vercel
 ├── scripts/
 │   ├── install_cron.sh  # Script d'installation du cron
+│   ├── run_server.sh    # Script pour lancer le serveur localement
+│   ├── run_tests.sh     # Script pour exécuter les tests
 │   └── sync_with_env.sh # Sync avec chargement du .env
 ├── tests/
 │   └── test_contacts.py # Tests
@@ -280,6 +245,16 @@ uv sync --dev
 ### Tests
 
 Les tests utilisent une base SQLite temporaire et surchargent la dépendance `get_db` de FastAPI pour isoler les tests de la base de production.
+
+**Exécution des tests** : Utilisez `./scripts/run_tests.sh` (voir section "Démarrage rapide" ci-dessus).
+
+Les tests vérifient :
+- Authentification et récupération des contacts
+- Récupération d'un contact par ID
+- Gestion des contacts non trouvés
+- Rejet des identifiants invalides
+- Rejet des requêtes sans JWT
+- Rejet des requêtes sans signature HMAC
 
 ## Architecture
 
