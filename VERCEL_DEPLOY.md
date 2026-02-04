@@ -2,7 +2,7 @@
 
 Ce guide explique comment déployer l'API Odoo Contacts sur Vercel.
 
-## Prérequis
+## Prérequis 
 
 1. Un compte Vercel (gratuit)
 2. Le CLI Vercel installé : `npm i -g vercel`
