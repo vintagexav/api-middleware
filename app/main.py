@@ -17,13 +17,51 @@ from .security import (
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Gère le cycle de vie de l'application."""
-    # Startup: Créer les tables au démarrage
-    Base.metadata.create_all(bind=engine)
+    # Startup: Créer les tables au démarrage (avec gestion d'erreur)
+    try:
+        Base.metadata.create_all(bind=engine)
+    except Exception as e:
+        # Log l'erreur mais ne bloque pas le démarrage
+        # Les tables seront créées à la première requête si nécessaire
+        print(f"Warning: Could not create tables at startup: {e}")
     yield
     # Shutdown: Nettoyage si nécessaire
 
 
 app = FastAPI(title="Odoo Contacts API", version="0.1.0", lifespan=lifespan)
+
+
+@app.get("/")
+async def root():
+    """Endpoint de santé pour vérifier que l'API fonctionne."""
+    return {
+        "status": "ok",
+        "message": "Odoo Contacts API is running",
+        "version": "0.1.0"
+    }
+
+
+@app.get("/health")
+async def health():
+    """Endpoint de santé détaillé."""
+    from sqlalchemy import text
+    
+    try:
+        # Tester la connexion à la base de données
+        with engine.connect() as conn:
+            conn.execute(text("SELECT 1"))
+        db_status = "connected"
+    except Exception as e:
+        db_status = f"error: {str(e)}"
+    
+    return {
+        "status": "ok",
+        "database": db_status,
+        "environment": {
+            "has_database_url": bool(getattr(settings, "database_url", None)),
+            "has_odoo_config": bool(getattr(settings, "odoo_url", None)),
+        }
+    }
 
 
 @app.post("/auth/login")
