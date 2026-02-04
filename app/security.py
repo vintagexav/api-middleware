@@ -1,7 +1,7 @@
 import hashlib
 import hmac
 import time
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 from fastapi import Depends, Header, HTTPException, Request, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -15,7 +15,10 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
 
 def create_access_token(subject: str) -> str:
-    expire = datetime.utcnow() + timedelta(minutes=settings.jwt_expire_minutes)
+    """Crée un token JWT avec expiration selon les bonnes pratiques."""
+    expire = datetime.now(timezone.utc) + timedelta(
+        minutes=settings.jwt_expire_minutes
+    )
     to_encode = {"sub": subject, "exp": expire}
     return jwt.encode(to_encode, settings.jwt_secret, algorithm=ALGORITHM)
 

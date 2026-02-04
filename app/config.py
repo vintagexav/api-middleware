@@ -1,5 +1,5 @@
 from pydantic import Field
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class Settings(BaseSettings):
@@ -18,10 +18,16 @@ class Settings(BaseSettings):
     admin_username: str = Field(default="admin", validation_alias="ADMIN_USERNAME")
     admin_password: str = Field(default="admin", validation_alias="ADMIN_PASSWORD")
 
-    class Config:
-        env_file = ".env"
-        env_prefix = ""
-        case_sensitive = False
+    # Base de données
+    database_url: str = Field(
+        default="sqlite:///./contacts.db", validation_alias="DATABASE_URL"
+    )
+
+    model_config = SettingsConfigDict(
+        env_file=".env",
+        env_prefix="",
+        case_sensitive=False,
+    )
 
 
 settings = Settings()

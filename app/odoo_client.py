@@ -34,25 +34,34 @@ class OdooClient:
         self.models = xmlrpc.client.ServerProxy(f"{settings.odoo_url}/xmlrpc/2/object")
 
     def get_contacts(self):
+        """Récupère tous les contacts (res.partner) selon la doc Odoo.
+        
+        Note: Le champ 'id' est toujours inclus même si non explicitement demandé.
+        """
         return self.models.execute_kw(
             settings.odoo_db,
             self.uid,
             settings.odoo_password,
             "res.partner",
             "search_read",
-            [[]],
-            {"fields": ["id", "name", "email", "phone"]},
+            [[]],  # Domaine vide = tous les enregistrements
+            {"fields": ["name", "email", "phone"]},  # 'id' est toujours inclus
         )
 
     def get_contact_by_id(self, contact_id: int):
+        """Récupère un contact par ID selon la doc Odoo.
+        
+        Note: Le format correct est [ids] où ids est une liste d'IDs.
+        Le champ 'id' est toujours inclus même si non explicitement demandé.
+        """
         result = self.models.execute_kw(
             settings.odoo_db,
             self.uid,
             settings.odoo_password,
             "res.partner",
             "read",
-            [[contact_id]],
-            {"fields": ["id", "name", "email", "phone"]},
+            [[contact_id]],  # Format: liste contenant une liste d'IDs
+            {"fields": ["name", "email", "phone"]},  # 'id' est toujours inclus
         )
         return result[0] if result else None
 

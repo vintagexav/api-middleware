@@ -1,7 +1,9 @@
 from fastapi import Depends, FastAPI, HTTPException
+from sqlalchemy.orm import Session
 
 from .config import settings  # noqa: F401  # chargé pour valider la config au démarrage
-from .odoo_client import OdooClient
+from .database import get_db
+from .db_client import DBClient
 from .security import (
     authenticate_user,
     create_access_token,
@@ -10,9 +12,6 @@ from .security import (
 )
 
 app = FastAPI(title="Odoo Contacts API", version="0.1.0")
-
-def get_odoo_client() -> OdooClient:
-    return OdooClient()
 
 
 @app.post("/auth/login")
@@ -27,11 +26,13 @@ async def login(username: str = Depends(authenticate_user)):
 )
 async def get_contacts(
     current_user: str = Depends(get_current_user),  # noqa: ARG001
-    odoo_client: OdooClient = Depends(get_odoo_client),
+    db: Session = Depends(get_db),
 ):
+    """Récupère tous les contacts depuis la base de données."""
     try:
-        return odoo_client.get_contacts()
-    except Exception as exc:  # pragma: no cover - dépend d'Odoo
+        db_client = DBClient(db)
+        return db_client.get_contacts()
+    except Exception as exc:
         raise HTTPException(status_code=500, detail=str(exc)) from exc
 
 
@@ -42,9 +43,11 @@ async def get_contacts(
 async def get_contact(
     contact_id: int,
     current_user: str = Depends(get_current_user),  # noqa: ARG001
-    odoo_client: OdooClient = Depends(get_odoo_client),
+    db: Session = Depends(get_db),
 ):
-    contact = odoo_client.get_contact_by_id(contact_id)
+    """Récupère un contact par ID depuis la base de données."""
+    db_client = DBClient(db)
+    contact = db_client.get_contact_by_id(contact_id)
 
     if not contact:
         raise HTTPException(status_code=404, detail="Contact not found")

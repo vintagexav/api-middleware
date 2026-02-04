@@ -1,0 +1,18 @@
+# Exemple de configuration cron pour synchroniser les contacts toutes les 5 minutes
+# Pour installer cette configuration, exécutez: crontab crontab.example
+#
+# Format: minute heure jour mois jour-semaine commande
+#
+# IMPORTANT: Remplacez CHIFT/api-middleware par le chemin réel de votre projet
+#
+# Option recommandée: Utiliser le script sync_with_env.sh (charge automatiquement le .env)
+*/5 * * * * CHIFT/api-middleware/scripts/sync_with_env.sh >> /var/log/contacts_sync.log 2>&1
+
+# Alternative: Commande directe (nécessite de définir les variables d'environnement)
+# */5 * * * * cd CHIFT/api-middleware && /usr/local/bin/uv run python sync_contacts.py >> /var/log/contacts_sync.log 2>&1
+
+# Alternative: synchroniser toutes les heures
+# 0 * * * * /CHIFT/api-middleware/scripts/sync_with_env.sh >> /var/log/contacts_sync.log 2>&1
+
+# Alternative: synchroniser tous les jours à minuit
+# 0 0 * * * /CHIFT/api-middleware/scripts/sync_with_env.sh >> /var/log/contacts_sync.log 2>&1

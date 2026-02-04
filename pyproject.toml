@@ -9,6 +9,7 @@ dependencies = [
     "python-jose[cryptography]",
     "pydantic-settings",
     "python-multipart",
+    "sqlalchemy",
 ]
 
 [dependency-groups]
