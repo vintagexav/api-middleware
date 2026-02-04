@@ -10,15 +10,22 @@ DATABASE_URL = getattr(settings, "database_url", "sqlite:///./contacts.db")
 # Configuration de l'engine selon le type de base de données
 if "sqlite" in DATABASE_URL:
     connect_args = {"check_same_thread": False}
+    # Pour SQLite, désactiver le pool_pre_ping qui peut causer des problèmes
+    engine = create_engine(
+        DATABASE_URL,
+        connect_args=connect_args,
+        pool_pre_ping=False,
+    )
 else:
     # PostgreSQL ou autre
     connect_args = {}
-
-engine = create_engine(
-    DATABASE_URL,
-    connect_args=connect_args,
-    pool_pre_ping=True,  # Vérifier la connexion avant utilisation
-)
+    engine = create_engine(
+        DATABASE_URL,
+        connect_args=connect_args,
+        pool_pre_ping=True,  # Vérifier la connexion avant utilisation
+        pool_size=1,  # Limiter le pool pour serverless
+        max_overflow=0,  # Pas de connexions supplémentaires
+    )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
