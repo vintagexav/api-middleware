@@ -1,11 +1,7 @@
-"""Handler Vercel pour FastAPI."""
+"""Handler Vercel pour FastAPI avec Mangum."""
 from mangum import Mangum
 from app.main import app
 
-# Créer le handler Mangum avec lifespan désactivé
-mangum_app = Mangum(app, lifespan="off")
-
-# Exporter comme fonction pour Vercel (signature attendue: event, context)
-def handler(event, context):
-    """Handler pour Vercel serverless functions."""
-    return mangum_app(event, context)
+# Utiliser lifespan="off" pour éviter les problèmes avec Vercel
+# et exporter directement l'objet Mangum
+handler = Mangum(app, lifespan="off")
