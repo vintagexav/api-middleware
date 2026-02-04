@@ -9,7 +9,7 @@ cd "$SCRIPT_DIR" || exit 1
 # Variables d'environnement requises pour les tests
 export HMAC_SECRET="${HMAC_SECRET:-HMACsecretTest222@@}"
 export JWT_SECRET="${JWT_SECRET:-JWTSEcret11@@}"
-export PYTHONPATH="${PYTHONPATH:-./}"
+export PYTHONPATH="${PYTHONPATH:-.}"
 
 echo "🧪 Exécution des tests..."
 echo "📍 Répertoire: $SCRIPT_DIR"

@@ -50,9 +50,16 @@ Le serveur sera accessible sur :
 
 # Avec options pytest personnalisées
 ./scripts/run_tests.sh tests/test_contacts.py                    # Tester un fichier spécifique
+./scripts/run_tests.sh tests/test_odoo_client.py                  # Tester le client Odoo
 ./scripts/run_tests.sh tests/test_contacts.py::test_login        # Tester une fonction spécifique
 ./scripts/run_tests.sh --cov=app                                  # Avec couverture de code
 ```
+
+**Tests disponibles :**
+- `tests/test_contacts.py` : Tests unitaires pour l'API FastAPI (6 tests)
+- `tests/test_odoo_client.py` : Tests unitaires pour le client Odoo XML-RPC (5 tests)
+
+Voir [tests/README.md](tests/README.md) pour plus de détails sur les tests.
 
 ## Prérequis
 
@@ -221,7 +228,14 @@ api-middleware/
 │   ├── run_tests.sh     # Script pour exécuter les tests
 │   └── sync_with_env.sh # Sync avec chargement du .env
 ├── tests/
-│   └── test_contacts.py # Tests
+│   ├── test_contacts.py      # Tests unitaires API FastAPI
+│   ├── test_odoo_client.py   # Tests unitaires client Odoo
+│   ├── scripts/              # Scripts de test manuels
+│   │   ├── test_api_improved.py  # Test API locale
+│   │   ├── test_vercel.py         # Test API Vercel
+│   │   ├── test_odoo_complete.py  # Test complet Odoo
+│   │   └── ...                    # Autres scripts de test
+│   └── integration/          # Tests d'intégration (vide)
 ├── sync_contacts.py     # Script de synchronisation Odoo -> DB
 ├── init_db.py           # Initialisation de la base de données
 ├── crontab.example      # Exemple de configuration cron
@@ -244,17 +258,35 @@ uv sync --dev
 
 ### Tests
 
-Les tests utilisent une base SQLite temporaire et surchargent la dépendance `get_db` de FastAPI pour isoler les tests de la base de production.
+Les tests sont organisés dans le dossier `tests/` :
+
+```
+tests/
+├── test_contacts.py          # Tests unitaires API FastAPI
+├── test_odoo_client.py       # Tests unitaires client Odoo
+└── scripts/                  # Scripts de test manuels
+```
 
 **Exécution des tests** : Utilisez `./scripts/run_tests.sh` (voir section "Démarrage rapide" ci-dessus).
 
-Les tests vérifient :
+**Tests unitaires (`test_contacts.py`)** :
 - Authentification et récupération des contacts
 - Récupération d'un contact par ID
 - Gestion des contacts non trouvés
 - Rejet des identifiants invalides
 - Rejet des requêtes sans JWT
 - Rejet des requêtes sans signature HMAC
+
+**Tests unitaires (`test_odoo_client.py`)** :
+- Initialisation du client Odoo
+- Récupération de tous les contacts depuis Odoo
+- Récupération d'un contact par ID
+- Gestion d'un ID inexistant
+- Validation des variables d'environnement
+
+Les tests utilisent une base SQLite temporaire et surchargent la dépendance `get_db` de FastAPI pour isoler les tests de la base de production.
+
+**Scripts de test manuels** : Les scripts dans `tests/scripts/` permettent de tester l'API manuellement (locale ou Vercel). Voir [tests/README.md](tests/README.md) pour plus de détails.
 
 ## Architecture
 

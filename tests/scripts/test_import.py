@@ -8,8 +8,9 @@ os.environ.setdefault("DATABASE_URL", "sqlite:///./test.db")
 os.environ.setdefault("HMAC_SECRET", "test-secret")
 os.environ.setdefault("JWT_SECRET", "test-jwt-secret")
 
-# Ajouter le répertoire parent au path
-project_root = os.path.dirname(os.path.abspath(__file__))
+# Ajouter le répertoire racine du projet au path (deux niveaux au-dessus)
+script_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.dirname(os.path.dirname(script_dir))
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
