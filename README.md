@@ -254,3 +254,16 @@ Les tests utilisent un `DummyOdooClient` pour éviter de nécessiter une connexi
 - ✅ **Fiabilité** : L'API fonctionne même si Odoo est temporairement indisponible
 - ✅ **Synchronisation automatique** : Les contacts sont toujours à jour grâce au cron
 - ✅ **Sécurité** : Pas d'accès direct à Odoo depuis l'API publique
+
+## Déploiement
+
+### Vercel
+
+Pour déployer sur Vercel, consultez le guide détaillé : [VERCEL_DEPLOY.md](VERCEL_DEPLOY.md)
+
+**Déploiement rapide :**
+1. Installez Vercel CLI : `npm i -g vercel`
+2. Configurez les variables d'environnement dans Vercel
+3. Déployez : `vercel --prod`
+
+⚠️ **Important** : SQLite ne fonctionne pas bien sur Vercel (serverless). Utilisez une base de données externe comme PostgreSQL.

@@ -1,0 +1,14 @@
+# Fichiers à ignorer pour Vercel
+tests/
+scripts/
+*.sh
+crontab.example
+test_*.py
+*.db
+*.db-journal
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.git/
+.github/
