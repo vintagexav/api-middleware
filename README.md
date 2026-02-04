@@ -228,24 +228,31 @@ api-middleware/
 │   ├── run_tests.sh     # Script pour exécuter les tests
 │   └── sync_with_env.sh # Sync avec chargement du .env
 ├── tests/
+│   ├── __init__.py
+│   ├── README.md        # Documentation des tests
 │   ├── test_contacts.py      # Tests unitaires API FastAPI
 │   ├── test_odoo_client.py   # Tests unitaires client Odoo
 │   ├── scripts/              # Scripts de test manuels
-│   │   ├── test_api_improved.py  # Test API locale
-│   │   ├── test_vercel.py         # Test API Vercel
-│   │   ├── test_odoo_complete.py  # Test complet Odoo
-│   │   └── ...                    # Autres scripts de test
-│   └── integration/          # Tests d'intégration (vide)
+│   │   ├── README.md         # Documentation des scripts de test
+│   │   ├── test_api_improved.py  # Test API locale (avec gestion d'erreurs)
+│   │   ├── test_vercel.py         # Test API Vercel (complet)
+│   │   ├── test_vercel_debug.py   # Test API Vercel (debug HMAC)
+│   │   ├── test_odoo_complete.py  # Test complet Odoo (direct + FastAPI)
+│   │   ├── test_import.py          # Test d'imports
+│   │   ├── test_api.sh             # Script shell pour tester l'API locale
+│   │   └── test_vercel.sh          # Script shell pour tester l'API Vercel
+│   └── integration/          # Tests d'intégration (vide pour l'instant)
 ├── sync_contacts.py     # Script de synchronisation Odoo -> DB
 ├── init_db.py           # Initialisation de la base de données
 ├── crontab.example      # Exemple de configuration cron
 ├── pyproject.toml       # Configuration du projet et dépendances
 ├── requirements.txt     # Dépendances (utilisé par Vercel)
+├── uv.lock              # Lock file pour uv (gestionnaire de paquets)
 ├── vercel.json          # Configuration Vercel
 ├── Dockerfile           # Image Docker
 ├── render.yaml          # Configuration Render.com
 ├── VERCEL_DEPLOY.md     # Guide de déploiement Vercel
-└── README.md
+└── README.md            # Ce fichier
 ```
 
 ## Développement
