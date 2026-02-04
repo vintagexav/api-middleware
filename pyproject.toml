@@ -19,3 +19,12 @@ dev = [
     "pytest-mock",
 ]
 
+[tool.pytest.ini_options]
+# Exclure les fichiers de test Vercel (ils font des appels HTTP réels)
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+# Exclure les fichiers de test Vercel qui font des appels HTTP réels
+norecursedirs = [".git", ".venv", "__pycache__", "*.egg"]
+# Ignorer les fichiers de test Vercel dans le répertoire racine
+collect_ignore = ["test_vercel.py", "test_vercel_debug.py"]
+
