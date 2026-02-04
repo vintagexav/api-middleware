@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from .config import settings  # noqa: F401  # chargé pour valider la config au démarrage
 from .database import Base, engine, get_db
 from .db_client import DBClient
+from .odoo_client import OdooClient
 from .security import (
     authenticate_user,
     create_access_token,
@@ -68,6 +69,16 @@ async def health():
 async def login(username: str = Depends(authenticate_user)):
     access_token = create_access_token(subject=username)
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+@app.get("/fetched")
+async def get_fetched_contacts():
+    """Récupère les contacts directement depuis Odoo."""
+    try:
+        odoo = OdooClient()
+        return odoo.get_contacts()
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=str(exc)) from exc
 
 
 @app.get(
