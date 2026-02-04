@@ -26,4 +26,3 @@ testpaths = ["tests"]
 python_files = ["test_*.py"]
 # Exclure les fichiers de test Vercel qui font des appels HTTP réels
 norecursedirs = [".git", ".venv", "__pycache__", "*.egg"]
-

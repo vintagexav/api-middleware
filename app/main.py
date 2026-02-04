@@ -71,7 +71,7 @@ async def login(username: str = Depends(authenticate_user)):
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@app.get("/fetched")
+@app.get("/fetch")
 async def get_fetched_contacts():
     """Récupère les contacts directement depuis Odoo."""
     try:

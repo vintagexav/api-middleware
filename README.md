@@ -4,42 +4,42 @@
 
 Base URL (Vercel) : `https://api-middleware-two.vercel.app`
 
-| Methode | Endpoint | Auth | Description |
+| Méthode | Endpoint | Auth | Description |
 |---------|----------|------|-------------|
 | `GET` | `/` | Non | Health check |
-| `GET` | `/health` | Non | Health check detaille (statut DB) |
-| `GET` | `/fetched` | Non | Contacts recuperes en direct depuis Odoo |
+| `GET` | `/health` | Non | Health check détaillé (statut DB) |
+| `GET` | `/fetch` | Non | Contacts récupérés en direct depuis Odoo |
 | `POST` | `/auth/login` | Non | Obtenir un token JWT |
-| `GET` | `/contacts` | JWT + HMAC | Contacts depuis la base de donnees |
-| `GET` | `/contacts/{id}` | JWT + HMAC | Contact par ID depuis la base de donnees |
+| `GET` | `/contacts` | JWT + HMAC | Contacts depuis la base de données |
+| `GET` | `/contacts/{id}` | JWT + HMAC | Contact par ID depuis la base de données |
 
 FastAPI proxy vers Odoo (contacts) avec authentification JWT + HMAC.
 
 ## Description
 
-Cette API middleware permet d'acceder aux contacts Odoo via une API REST securisee avec :
+Cette API middleware permet d'accéder aux contacts Odoo via une API REST sécurisée avec :
 - **Authentification JWT** (JSON Web Tokens)
-- **Verification HMAC** pour l'integrite des requetes
-- **Base de donnees** : SQLite en dev local, PostgreSQL en production (Vercel)
-- **Endpoint direct** : `/fetched` recupere les contacts directement depuis Odoo
-- **Endpoints securises** : `/contacts` lit depuis la base de donnees
+- **Vérification HMAC** pour l'intégrité des requêtes
+- **Base de données** : SQLite en dev local, PostgreSQL en production (Vercel)
+- **Endpoint direct** : `/fetch` récupère les contacts directement depuis Odoo
+- **Endpoints sécurisés** : `/contacts` lit depuis la base de données
 
-## Prerequis
+## Prérequis
 
 - Python >= 3.12
 - `uv` (gestionnaire de paquets Python)
-- Acces a une instance Odoo
+- Accès à une instance Odoo
 
 ## Installation
 
 ```bash
-# Installer les dependances avec uv
+# Installer les dépendances avec uv
 uv sync
 ```
 
 ## Configuration
 
-Creez un fichier `.env` a la racine du projet avec les variables suivantes :
+Créez un fichier `.env` à la racine du projet avec les variables suivantes :
 
 ```env
 # Configuration Odoo
@@ -48,17 +48,17 @@ ODOO_DB=your_database
 ODOO_USER=your_username
 ODOO_PASSWORD=your_password
 
-# Securite
+# Sécurité
 JWT_SECRET=your-jwt-secret-key
 JWT_EXPIRE_MINUTES=60
 HMAC_SECRET=your-hmac-secret-key
 
-# Authentification de demo
+# Authentification de démo
 ADMIN_USERNAME=admin
 ADMIN_PASSWORD=admin
 
-# Base de donnees
-# SQLite pour le developpement local (par defaut)
+# Base de données
+# SQLite pour le développement local (par défaut)
 DATABASE_URL=sqlite:///./contacts.db
 # PostgreSQL pour la production (Vercel, Render, etc.)
 # DATABASE_URL=postgresql://user:password@host:5432/dbname
@@ -66,9 +66,9 @@ DATABASE_URL=sqlite:///./contacts.db
 
 ## Synchronisation des contacts (dev local)
 
-En developpement local avec SQLite, vous pouvez synchroniser les contacts depuis Odoo vers la base de donnees.
+En développement local avec SQLite, vous pouvez synchroniser les contacts depuis Odoo vers la base de données.
 
-> **Note** : Cette synchronisation par cron est prevue pour un serveur persistant. Sur Vercel (serverless), utilisez l'endpoint `/fetched` ou une base PostgreSQL alimentee autrement.
+> **Note** : Cette synchronisation par cron est prévue pour un serveur persistant. Sur Vercel (serverless), utilisez l'endpoint `/fetch` ou une base PostgreSQL alimentée autrement.
 
 ### Synchronisation manuelle
 
@@ -89,11 +89,11 @@ Pour synchroniser automatiquement les contacts toutes les 5 minutes :
 
 #### Option 2 : Installation manuelle
 
-1. Editez le fichier `crontab.example` et ajustez les chemins
+1. Éditez le fichier `crontab.example` et ajustez les chemins
 2. Installez-le avec : `crontab crontab.example`
-3. Verifiez avec : `crontab -l`
+3. Vérifiez avec : `crontab -l`
 
-**Note** : La synchronisation cree automatiquement la base de donnees et les tables si elles n'existent pas.
+**Note** : La synchronisation crée automatiquement la base de données et les tables si elles n'existent pas.
 
 ## Lancer l'API
 
@@ -102,12 +102,12 @@ Pour synchroniser automatiquement les contacts toutes les 5 minutes :
 uv run uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-L'API sera accessible a :
+L'API sera accessible à :
 - **Documentation interactive** : http://localhost:8000/docs
 - **Documentation alternative** : http://localhost:8000/redoc
 - **Base URL** : http://localhost:8000
 
-## Executer les tests
+## Exécuter les tests
 
 ```bash
 HMAC_SECRET="HMACsecretTest222@@" \
@@ -118,24 +118,24 @@ uv run pytest tests/ -v -s
 
 **Note** : L'option `-s` est requise pour afficher les `print()` dans les tests.
 
-Les tests verifient :
-- Authentification et recuperation des contacts
-- Recuperation d'un contact par ID
-- Gestion des contacts non trouves
+Les tests vérifient :
+- Authentification et récupération des contacts
+- Récupération d'un contact par ID
+- Gestion des contacts non trouvés
 - Rejet des identifiants invalides
-- Rejet des requetes sans JWT
-- Rejet des requetes sans signature HMAC
+- Rejet des requêtes sans JWT
+- Rejet des requêtes sans signature HMAC
 
 ## Endpoints API
 
 ### POST `/auth/login`
 Authentification pour obtenir un token JWT.
 
-**Body (form-data)**:
-- `username`: Nom d'utilisateur
-- `password`: Mot de passe
+**Body (form-data)** :
+- `username` : Nom d'utilisateur
+- `password` : Mot de passe
 
-**Reponse**:
+**Réponse** :
 ```json
 {
   "access_token": "eyJ...",
@@ -144,14 +144,14 @@ Authentification pour obtenir un token JWT.
 ```
 
 ### GET `/contacts`
-Recupere tous les contacts depuis la base de donnees.
+Récupère tous les contacts depuis la base de données.
 
-**Headers requis**:
+**Headers requis** :
 - `Authorization: Bearer <token>`
 - `X-Timestamp: <timestamp_unix>`
 - `X-Signature: <hmac_signature>`
 
-**Reponse**:
+**Réponse** :
 ```json
 [
   {
@@ -164,14 +164,14 @@ Recupere tous les contacts depuis la base de donnees.
 ```
 
 ### GET `/contacts/{contact_id}`
-Recupere un contact specifique par ID.
+Récupère un contact spécifique par ID.
 
-**Headers requis**:
+**Headers requis** :
 - `Authorization: Bearer <token>`
 - `X-Timestamp: <timestamp_unix>`
 - `X-Signature: <hmac_signature>`
 
-**Reponse**:
+**Réponse** :
 ```json
 {
   "id": 1,
@@ -181,24 +181,24 @@ Recupere un contact specifique par ID.
 }
 ```
 
-## Securite
+## Sécurité
 
 ### JWT (JSON Web Tokens)
-- Utilise pour authentifier les utilisateurs
+- Utilisé pour authentifier les utilisateurs
 - Obtenu via `/auth/login`
 - Inclus dans le header `Authorization: Bearer <token>`
 
 ### HMAC Signature
-Chaque requete protegee (`/contacts`) doit inclure :
-- `X-Timestamp`: Timestamp Unix de la requete
-- `X-Signature`: Signature HMAC-SHA256 calculee comme suit :
+Chaque requête protégée (`/contacts`) doit inclure :
+- `X-Timestamp` : Timestamp Unix de la requête
+- `X-Signature` : Signature HMAC-SHA256 calculée comme suit :
 
 ```
 message = method + path + timestamp + body
 signature = HMAC-SHA256(hmac_secret, message)
 ```
 
-La signature doit etre calculee avec le secret `HMAC_SECRET` configure.
+La signature doit être calculée avec le secret `HMAC_SECRET` configuré.
 
 ## Structure du projet
 
@@ -209,7 +209,7 @@ api-middleware/
 │   ├── main.py          # Application FastAPI principale
 │   ├── config.py        # Configuration (pydantic-settings)
 │   ├── database.py      # Configuration SQLAlchemy
-│   ├── models.py        # Modeles de base de donnees (Contact)
+│   ├── models.py        # Modèles de base de données (Contact)
 │   ├── db_client.py     # Client pour lire depuis la DB
 │   ├── odoo_client.py   # Client XML-RPC pour Odoo
 │   └── security.py      # Authentification JWT + HMAC
@@ -222,20 +222,20 @@ api-middleware/
 ├── tests/
 │   └── test_contacts.py # Tests
 ├── sync_contacts.py     # Script de synchronisation Odoo -> DB
-├── init_db.py           # Initialisation de la base de donnees
+├── init_db.py           # Initialisation de la base de données
 ├── crontab.example      # Exemple de configuration cron
-├── pyproject.toml       # Configuration du projet et dependances
-├── requirements.txt     # Dependances (utilise par Vercel)
+├── pyproject.toml       # Configuration du projet et dépendances
+├── requirements.txt     # Dépendances (utilisé par Vercel)
 ├── vercel.json          # Configuration Vercel
 ├── Dockerfile           # Image Docker
 ├── render.yaml          # Configuration Render.com
-├── VERCEL_DEPLOY.md     # Guide de deploiement Vercel
+├── VERCEL_DEPLOY.md     # Guide de déploiement Vercel
 └── README.md
 ```
 
-## Developpement
+## Développement
 
-### Installer les dependances de developpement
+### Installer les dépendances de développement
 
 ```bash
 uv sync --dev
@@ -243,30 +243,30 @@ uv sync --dev
 
 ### Tests
 
-Les tests utilisent une base SQLite temporaire et overrident la dependance `get_db` de FastAPI pour isoler les tests de la base de production.
+Les tests utilisent une base SQLite temporaire et surchargent la dépendance `get_db` de FastAPI pour isoler les tests de la base de production.
 
 ## Architecture
 
-### Deux modes d'acces aux contacts
+### Deux modes d'accès aux contacts
 
-1. **Direct** (`/fetched`) : Appel XML-RPC a Odoo en temps reel
-2. **Via base de donnees** (`/contacts`) : Lecture depuis SQLite/PostgreSQL, alimentee par `sync_contacts.py`
+1. **Direct** (`/fetch`) : Appel XML-RPC à Odoo en temps réel
+2. **Via base de données** (`/contacts`) : Lecture depuis SQLite/PostgreSQL, alimentée par `sync_contacts.py`
 
 ### Flux de synchronisation (dev local)
 
-1. `sync_contacts.py` se connecte a Odoo via XML-RPC
-2. Recupere tous les contacts
-3. Synchronise la base de donnees :
-   - **Insere** les nouveaux contacts
-   - **Met a jour** les contacts existants
+1. `sync_contacts.py` se connecte à Odoo via XML-RPC
+2. Récupère tous les contacts
+3. Synchronise la base de données :
+   - **Insère** les nouveaux contacts
+   - **Met à jour** les contacts existants
    - **Supprime** les contacts qui n'existent plus dans Odoo
-4. L'API lit les contacts depuis la base de donnees
+4. L'API lit les contacts depuis la base de données
 
-## Deploiement
+## Déploiement
 
 ### Vercel (production)
 
-Pour deployer sur Vercel, consultez le guide detaille : [VERCEL_DEPLOY.md](VERCEL_DEPLOY.md)
+Pour déployer sur Vercel, consultez le guide détaillé : [VERCEL_DEPLOY.md](VERCEL_DEPLOY.md)
 
 ```bash
 npm i -g vercel
@@ -284,4 +284,4 @@ docker run -p 8000:8000 --env-file .env odoo-contacts-api
 
 ### Render.com
 
-Le fichier `render.yaml` est fourni pour un deploiement sur Render. Les secrets JWT et HMAC sont generes automatiquement.
+Le fichier `render.yaml` est fourni pour un déploiement sur Render. Les secrets JWT et HMAC sont générés automatiquement.
