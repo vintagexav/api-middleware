@@ -9,10 +9,10 @@ tests/
 ├── test_contacts.py          # Tests unitaires pour l'API contacts
 ├── test_odoo_client.py       # Tests unitaires pour le client Odoo (XML-RPC)
 ├── scripts/                  # Scripts de test manuels
-│   ├── test_api.py          # Test API locale (basique)
-│   ├── test_api_improved.py # Test API locale (amélioré)
-│   ├── test_vercel.py       # Test API Vercel
-│   ├── test_vercel_debug.py # Test API Vercel (debug)
+│   ├── test_api_improved.py # Test API locale (avec gestion d'erreurs)
+│   ├── test_vercel.py       # Test API Vercel (complet)
+│   ├── test_vercel_debug.py # Test API Vercel (debug HMAC)
+│   ├── test_odoo_complete.py # Test complet Odoo (direct + FastAPI)
 │   ├── test_import.py       # Test d'imports
 │   ├── test_api.sh          # Script shell pour tester l'API locale
 │   └── test_vercel.sh       # Script shell pour tester l'API Vercel
@@ -44,7 +44,15 @@ Pour exécuter un test spécifique :
 
 ### Scripts de test manuels
 
-Les scripts dans `tests/scripts/` sont des outils de test manuels pour tester l'API de différentes manières. Voir [tests/scripts/README.md](scripts/README.md) pour plus de détails.
+Les scripts dans `tests/scripts/` sont des outils de test manuels pour tester l'API de différentes manières :
+
+- **Tests API FastAPI locale** : `test_api_improved.py` (avec gestion d'erreurs améliorée)
+- **Tests API Vercel** : `test_vercel.py` (complet), `test_vercel_debug.py` (debug HMAC)
+- **Tests Odoo** : `test_odoo_complete.py` (direct XML-RPC + FastAPI)
+- **Utilitaires** : `test_import.py` (vérification des imports)
+- **Scripts shell** : `test_api.sh`, `test_vercel.sh` (tests avec curl)
+
+Voir [tests/scripts/README.md](scripts/README.md) pour plus de détails et exemples d'utilisation.
 
 ## Tests unitaires
 

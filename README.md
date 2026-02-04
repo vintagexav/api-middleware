@@ -231,9 +231,10 @@ api-middleware/
 │   ├── test_contacts.py      # Tests unitaires API FastAPI
 │   ├── test_odoo_client.py   # Tests unitaires client Odoo
 │   ├── scripts/              # Scripts de test manuels
-│   │   ├── test_api.py       # Test API locale
-│   │   ├── test_vercel.py    # Test API Vercel
-│   │   └── ...               # Autres scripts de test
+│   │   ├── test_api_improved.py  # Test API locale
+│   │   ├── test_vercel.py         # Test API Vercel
+│   │   ├── test_odoo_complete.py  # Test complet Odoo
+│   │   └── ...                    # Autres scripts de test
 │   └── integration/          # Tests d'intégration (vide)
 ├── sync_contacts.py     # Script de synchronisation Odoo -> DB
 ├── init_db.py           # Initialisation de la base de données
