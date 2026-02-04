@@ -8,6 +8,7 @@ from sqlalchemy.orm import sessionmaker
 from app.database import Base, get_db
 from app.main import app
 from app.models import Contact
+from app.config import settings
 
 # Créer une base de données temporaire pour les tests (fichier temporaire)
 import tempfile
@@ -46,7 +47,8 @@ app.dependency_overrides[get_db] = override_get_db
 # Créer le client de test
 client = TestClient(app)
 
-HMAC_SECRET = "HMACsecretTest222@@"
+# Utiliser le secret depuis les settings (chargé depuis les variables d'environnement)
+HMAC_SECRET = settings.hmac_secret
 
 
 def setup_test_db():
