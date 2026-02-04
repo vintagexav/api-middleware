@@ -24,6 +24,42 @@ Cette API middleware permet d'accéder aux contacts Odoo via une API REST sécur
 - **Endpoint direct** : `/fetch` récupère les contacts directement depuis Odoo
 - **Endpoints sécurisés** : `/contacts` lit depuis la base de données
 
+## Démarrage rapide (Local)
+
+### Lancer le serveur
+
+```bash
+# Depuis le répertoire du projet
+./scripts/run_server.sh
+
+# Ou avec options
+./scripts/run_server.sh --kill          # Arrête automatiquement un serveur existant sur le port 8000
+./scripts/run_server.sh --port 8001     # Utilise un port différent
+```
+
+Le serveur sera accessible sur :
+- **API** : http://localhost:8000
+- **Documentation interactive** : http://localhost:8000/docs
+- **Documentation alternative** : http://localhost:8000/redoc
+
+### Exécuter les tests
+
+```bash
+# Depuis le répertoire du projet
+./scripts/run_tests.sh
+
+# Avec options pytest personnalisées
+./scripts/run_tests.sh tests/test_contacts.py                    # Tester un fichier spécifique
+./scripts/run_tests.sh tests/test_contacts.py::test_login        # Tester une fonction spécifique
+./scripts/run_tests.sh --cov=app                                  # Avec couverture de code
+```
+
+**Note** : Assurez-vous d'être dans le répertoire `api-middleware` pour exécuter les scripts. Si vous êtes ailleurs, utilisez le chemin complet :
+```bash
+cd /Users/xavier/code/CHIFT/api-middleware
+./scripts/run_server.sh
+```
+
 ## Prérequis
 
 - Python >= 3.12
