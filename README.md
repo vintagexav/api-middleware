@@ -1,5 +1,18 @@
 # Odoo Contacts API
 
+## Endpoints Vercel
+
+Base URL : `https://api-middleware-two.vercel.app`
+
+| Méthode | Endpoint | Auth | Description |
+|---------|----------|------|-------------|
+| `GET` | `/` | Non | Health check |
+| `GET` | `/health` | Non | Health check détaillé (statut DB) |
+| `GET` | `/fetched` | Non | Contacts récupérés en direct depuis Odoo |
+| `POST` | `/auth/login` | Non | Obtenir un token JWT |
+| `GET` | `/contacts` | JWT + HMAC | Contacts depuis la base de données locale |
+| `GET` | `/contacts/{id}` | JWT + HMAC | Contact par ID depuis la base de données locale |
+
 FastAPI proxy vers Odoo (contacts) avec authentification JWT + HMAC et synchronisation automatique.
 
 ## Description
