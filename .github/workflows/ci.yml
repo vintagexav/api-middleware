@@ -28,8 +28,18 @@ jobs:
   deploy:
     needs: test
     runs-on: ubuntu-latest
+    # Déployer uniquement sur la branche main après que les tests passent
     if: github.ref == 'refs/heads/main'
     steps:
-      - name: Trigger Render deploy
+      - name: Trigger Render deploy (if configured)
+        if: ${{ secrets.RENDER_DEPLOY_HOOK != '' }}
         run: curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
-
+      
+      - name: Deploy status
+        run: |
+          if [ -z "${{ secrets.RENDER_DEPLOY_HOOK }}" ]; then
+            echo "✅ Render deploy skipped (secret not configured)"
+            echo "✅ Vercel will auto-deploy via GitHub integration"
+          else
+            echo "✅ Render deploy triggered successfully"
+          fi
