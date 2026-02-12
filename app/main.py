@@ -42,6 +42,12 @@ async def root():
     }
 
 
+@app.get("/hello")
+async def hello():
+    """Simple hello endpoint."""
+    return {"message": "hello"}
+
+
 @app.get("/health")
 async def health():
     """Endpoint de santé détaillé."""

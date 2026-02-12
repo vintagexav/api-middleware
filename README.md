@@ -28,6 +28,8 @@ Cette API middleware permet d'accéder aux contacts Odoo via une API REST sécur
 
 ### Lancer le serveur
 
+**Option 1: Script shell (recommandé pour développement local)**
+
 ```bash
 # Depuis le répertoire du projet
 ./scripts/run_server.sh
@@ -35,6 +37,22 @@ Cette API middleware permet d'accéder aux contacts Odoo via une API REST sécur
 # Ou avec options
 ./scripts/run_server.sh --kill          # Arrête automatiquement un serveur existant sur le port 8000
 ./scripts/run_server.sh --port 8001     # Utilise un port différent
+```
+
+**Option 2: Docker Compose (avec rechargement automatique)**
+
+```bash
+# Construire l'image une fois
+docker-compose -f docker-compose.dev.yml build
+
+# Lancer le serveur avec rechargement automatique
+docker-compose -f docker-compose.dev.yml up
+
+# Ou en arrière-plan
+docker-compose -f docker-compose.dev.yml up -d
+
+# Arrêter le serveur
+docker-compose -f docker-compose.dev.yml down
 ```
 
 Le serveur sera accessible sur :
@@ -355,10 +373,44 @@ Configurez `DATABASE_URL` avec une base PostgreSQL dans les variables d'environn
 
 ### Docker
 
+#### Production
+
 ```bash
 docker build -t odoo-contacts-api .
 docker run -p 8000:8000 --env-file .env odoo-contacts-api
 ```
+
+#### Development (with live reload - no rebuild needed)
+
+**Option 1: Using docker-compose (recommended)**
+
+```bash
+# Build once
+docker-compose -f docker-compose.dev.yml build
+
+# Run with live reloading
+docker-compose -f docker-compose.dev.yml up
+
+# Or run in detached mode
+docker-compose -f docker-compose.dev.yml up -d
+```
+
+**Option 2: Using docker run directly**
+
+```bash
+# Build once
+docker build -t odoo-contacts-api .
+
+# Run with volume mount for live reloading
+docker run -p 8000:8000 \
+  --env-file .env \
+  -v $(pwd):/app \
+  -v /app/.venv \
+  odoo-contacts-api \
+  uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+```
+
+With these commands, changes to your code files will automatically reload the server without needing to rebuild the Docker image.
 
 ### Render.com
 
